@@ -60,3 +60,6 @@ class Solution(object):
         
 ```
 
+Time Complexity: O(mn)
+
+Space Complexity: O(mn)
