@@ -9,7 +9,7 @@ categories: [algorithm, sliding-window, leetcode]
 
 # Solution
 
-We can use sliding-window to all the longest substrings present in string s. Next, we will use an array of length 26 to filter all the duplicated substrings.
+We can use sliding-window to find all the longest substrings present in string s. Next, we will use an array of length 26 to filter all the duplicated substrings.
 
 ```python
 class Solution(object):
