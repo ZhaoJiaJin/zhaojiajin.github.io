@@ -2,7 +2,7 @@
 layout: post
 title:  "712. Minimum ASCII Delete Sum for Two Strings"
 date:   2020-07-18 17:28:05 +0100
-categories: [leetcode, DP]
+categories: [algorithm, leetcode, DP]
 ---
 
 # Problem

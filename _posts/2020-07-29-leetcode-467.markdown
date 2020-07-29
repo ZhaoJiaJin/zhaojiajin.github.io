@@ -1,0 +1,50 @@
+---
+layout: post
+title:  "467. Unique Substrings in Wraparound String"
+date:   2020-07-29 22:44:35 +0100
+categories: [algorithm, sliding-window, leetcode]
+---
+
+# [Problem](https://leetcode.com/problems/unique-substrings-in-wraparound-string/)
+
+# Solution
+
+We can use sliding-window to all the longest substrings present in string s. Next, we will use an array of length 26 to filter all the duplicated substrings.
+
+```python
+class Solution(object):
+    def findSubstringInWraproundString(self, p):
+        """
+        :type p: str
+        :rtype: int
+        """
+        
+        n = len(p)
+        if n <= 0:
+            return 0
+        # maxc means the number of valid substrings that end with character idx+'a'
+        maxc = [0 for _ in range(26)]
+        pre = 0
+        cur = 0
+        ans = 0
+        while cur < n:
+            # keep increasing the second pointer if current window is a valid answer
+            while cur < n and ( pre == cur or isnext(p[cur-1],p[cur]) ): 
+                cidx = ord(p[cur]) - ord('a')
+                maxc[cidx] = max(maxc[cidx], cur-pre+1)
+                cur += 1     
+            # current window is not  valid anymore, we will change the first pointer to start a new window scanning
+            pre = cur
+        return sum(maxc)
+
+        
+def isnext(a,b):
+    if ord(b) - ord(a) == 1 or (a == 'z' and b == 'a'):
+        return True
+    return False
+
+```
+
+
+Time Complexity: O(n)
+Space Complexity: O(1)
