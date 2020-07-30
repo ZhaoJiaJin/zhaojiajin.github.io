@@ -1,0 +1,38 @@
+---
+layout: post
+title:  "480. Sliding Window Median"
+date:   2020-07-30 20:18:12 +0100
+categories: [algorithm,leetcode]
+---
+
+# [Problem](https://leetcode.com/problems/sliding-window-median/)
+
+```python
+from bisect import bisect_left
+
+class Solution(object):
+    def medianSlidingWindow(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[float]
+        """
+        window = nums[:k]
+        window.sort()
+        res = [median(window)]
+        for i in range(k,len(nums)):
+            window.remove(nums[i-k])
+            ele = nums[i]
+            pos = bisect_left(window,ele)
+            window.insert(pos,ele)
+            res.append(median(window))
+        return res
+def median(a):
+    n = len(a)
+    mid = n // 2
+    if n % 2 == 0:
+        return (a[mid] + a[mid-1])/2.0 # !!! need to use 2.0 here 
+    else:
+        return a[mid]
+```
+
