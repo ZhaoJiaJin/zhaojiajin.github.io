@@ -4,7 +4,7 @@ title:  "474. Ones and Zeroes"
 date:   2020-07-30 19:14:14 +0100
 categories: [leetcode,algorithm,DFS,DP]
 ---
-#[Problem](https://leetcode.com/problems/ones-and-zeroes/)
+# [Problem](https://leetcode.com/problems/ones-and-zeroes/)
 
 This is a 0-1 Knapsack Problem, we can solve it using DFS+memorization or DP
 
