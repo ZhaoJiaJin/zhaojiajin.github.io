@@ -23,7 +23,7 @@ class Solution(object):
         for i in range(k,len(nums)):
             window.remove(nums[i-k])
             ele = nums[i]
-            pos = bisect_left(window,ele)
+            pos = bisect_left(window,ele) # use binary search to time position
             window.insert(pos,ele)
             res.append(median(window))
         return res
@@ -36,3 +36,6 @@ def median(a):
         return a[mid]
 ```
 
+
+time complexity: O(n log(k))
+space complexity: O(k)
