@@ -1,0 +1,80 @@
+---
+layout: post
+title:  "474. Ones and Zeroes"
+date:   2020-07-30 19:14:14 +0100
+categories: [leetcode,algorithm,DFS,DP]
+---
+#[Problem](https://leetcode.com/problems/ones-and-zeroes/)
+
+This is a 0-1 Knapsack Problem, we can solve it using DFS+memorization or DP
+
+```python
+class Solution(object):
+    def __init__(self):
+        self.ans = 0
+    def findMaxForm(self, strs, m, n):
+        """
+        :type strs: List[str]
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        if len(strs) <= 0:
+            return 0
+        #strs.sort(key=lambda x:len(x))
+        dp = [[[0 for _ in range(n+1)] for _ in range(m+1)] for _ in range(len(strs)+1)]
+        #print(dp)
+        for i in range(1,len(strs)+1):
+            count0 = strs[i-1].count('0')
+            count1 = strs[i-1].count('1')
+            for x in range(m+1):
+                for y in range(n+1):
+                    if i == 0 or x+y == 0:
+                        dp[i][x][y] == 0
+                    elif count0 <= x and count1 <= y:
+                        dp[i][x][y] = max(dp[i-1][x][y], dp[i-1][x - count0][y - count1] + 1)
+                    else:
+                        dp[i][x][y] = dp[i-1][x][y]
+        return dp[len(strs)][m][n]
+
+```
+
+time complexity: O(mnN)
+space complexity: O(mnN)
+
+```python 
+class Solution(object):
+    def __init__(self):
+        self.ans = 0
+    def findMaxForm(self, strs, m, n):
+        """
+        :type strs: List[str]
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        if len(strs) <= 0:
+            return 0
+        #strs.sort(key=lambda x:len(x))
+        dp = [[[float('-inf') for _ in range(n+1)] for _ in range(m+1)] for _ in range(len(strs))]
+        #print(dp)
+        return max(0,self.dfs(0,strs,m,n,dp))
+        
+    def dfs(self,i,strs,m,n,dp):
+        if m < 0 or n < 0:
+            return float('-inf')
+        if i >= len(strs):
+            #self.ans = max(self.ans,ans)
+            return 0
+        if dp[i][m][n] != float('-inf'):
+            return dp[i][m][n]
+        ans1 = 1+self.dfs(i+1,strs,m-strs[i].count('0'),n - strs[i].count('1'),dp)
+        ans2 = self.dfs(i+1,strs,m,n,dp)
+        dp[i][m][n] = max(dp[i][m][n],ans1,ans2)
+        return dp[i][m][n]
+
+```
+
+
+time complexity: O(mnN)
+space complexity: O(N)
