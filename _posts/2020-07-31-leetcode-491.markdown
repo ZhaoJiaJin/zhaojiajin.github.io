@@ -1,0 +1,37 @@
+---
+layout: post
+title:  "491. Increasing Subsequences"
+date:   2020-07-31 20:02:03 +0100
+categories: [leetcode, algorithm, DFS]
+---
+
+
+```python
+class Solution(object):
+    def findSubsequences(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        ans = []
+        self.dfs(0,nums,[],ans)
+        return ans
+    def dfs(self,s,nums,path,ans):
+        if len(path) > 1:
+            ans.append(path[:])
+        if s == len(nums):
+            return
+        # we use a set to skip these numbers that we already selected, so we don't need to check duplicated answers.
+        used = set()
+        for i in range(s,len(nums)):
+            if (len(path) == 0 or nums[i] >= path[-1]) and nums[i] not in used:
+                used.add(nums[i])
+                path.append(nums[i])
+                self.dfs(i+1,nums,path,ans)
+                path.pop()
+        return
+```
+
+time complexity: O(2^n)
+space complexity: O(n)
+
