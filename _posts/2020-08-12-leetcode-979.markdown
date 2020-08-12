@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "Your Title"
+date:   2020-08-12 21:56:00 +0100
+categories: [leetcode, algorithm, DFS]
+---
+
+# [Problem](https://leetcode.com/problems/distribute-coins-in-binary-tree/)
+
+
+```python
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def __init__(self):
+        self.ans = 0
+    def distributeCoins(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        self.dfs(root)
+        return self.ans
+    def dfs(self,root):
+        if root == None:
+            return 0,0
+        coins = root.val
+        nodes = 1
+        leftcoins,leftnodes = self.dfs(root.left)
+        rightcoins,rightnodes = self.dfs(root.right)
+        leftleft = leftcoins - leftnodes
+        rightleft = rightcoins - rightnodes
+        moves = abs(leftleft) + abs(rightleft) # moves that pass coins to the root node
+        self.ans += moves
+        return leftcoins+rightcoins+root.val, leftnodes+rightnodes+1
+
+```
+
+time complexity: O(n) n is the number of nodes
+
+space complexity: O(h) h is the height of the tree
