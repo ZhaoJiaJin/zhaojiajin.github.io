@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Find "
+title:  "Word Sum in a book is Odd Or Even"
 date:   2020-08-17 15:42:25 +0100
 categories: [algorithm, DFS, Union-Find]
 ---
