@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Your Title"
+title:  "distribute-coins-in-binary-tree"
 date:   2020-08-12 21:56:00 +0100
 categories: [leetcode, algorithm, DFS]
 ---
