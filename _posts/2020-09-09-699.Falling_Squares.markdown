@@ -1,0 +1,165 @@
+---
+layout: post
+title:  "699. Falling Squares"
+date:   2020-09-09 21:07:01 +0100
+categories: [leetcode, algorithm, SegmentTree]
+---
+
+# [Problem](https://leetcode.com/problems/falling-squares/)
+
+# Solution  (segment tree with lazy propagation)
+
+## version 1
+
+```python
+
+class Node(object):
+    def __init__(self,low,hi,v):
+        self.low = low
+        self.hi = hi
+        self.val = v
+        self.lazy = -1
+        self.left = None
+        self.right = None
+
+class SegTree(object):
+    def __init__(self,N):
+        self.root = Node(0,N,0)
+    def query(self,l,r):
+        return self.queryhlp(self.root,l,r)
+    def update(self,l,r,val):
+        return self.updatehlp(self.root,l,r,val)
+    def queryhlp(self,root,l,r):
+        self.push(root)
+        if l <= root.low and root.hi <= r:
+            return root.val
+        if l > root.hi or r < root.low:
+            return 0
+        mid = (root.low + root.hi)//2
+        res = float('-inf')
+        if l <= mid:
+            res = max(res,self.queryhlp(root.left,l,r))
+        if r > mid:
+            res = max(res,self.queryhlp(root.right,l,r))
+        return res
+    def updatehlp(self,root,l,r,val):
+        if l <= root.low and root.hi <= r:
+            root.lazy = val
+        self.push(root)
+        if (l <= root.low and root.hi <= r) or l > root.hi or r < root.low:
+            return 
+        mid = (root.low + root.hi)//2
+        #if l <= mid:
+        self.updatehlp(root.left,l,r,val)
+        #if r > mid:
+        self.updatehlp(root.right,l,r,val)
+        root.val = max(root.left.val,root.right.val)
+    def push(self,root):
+        if root.lazy != -1:
+            root.val = root.lazy
+        if root.low != root.hi:
+            mid = root.low + (root.hi- root.low)//2
+            if root.left == None:
+                root.left = Node(root.low,mid,root.val)
+            if root.right == None:
+                root.right = Node(mid+1,root.hi,root.val)
+            if root.lazy != -1:
+                root.left.lazy = root.lazy
+                root.right.lazy = root.lazy
+        root.lazy = -1
+
+class Solution(object):
+    def fallingSquares(self, positions):
+        """
+        :type positions: List[List[int]]
+        :rtype: List[int]
+        """
+        ans = []
+        maxl = 0
+        for p in positions:
+            maxl = max(maxl,sum(p))
+        tree = SegTree(maxl)
+        for pos in positions:
+            cubel = pos[0]
+            cuber = pos[0]+pos[1]-1
+            cubeh = pos[1]
+            val = tree.query(cubel,cuber)
+            tree.update(cubel,cuber,cubeh+val)
+            ans.append(tree.root.val)
+        return ans
+
+```
+
+## version 2
+
+
+```python
+
+class Node(object):
+    def __init__(self,low,hi,v):
+        self.low = low
+        self.hi = hi
+        self.val = v
+        self.left = None
+        self.right = None
+
+class SegTree(object):
+    def __init__(self,N):
+        self.root = Node(0,N,0)
+    def query(self,l,r):
+        return self.queryhlp(self.root,l,r)
+    def update(self,l,r,val):
+        return self.updatehlp(self.root,l,r,val)
+    def queryhlp(self,root,l,r):
+        if l <= root.low and root.hi <= r:
+            return root.val
+        mid = (root.low + root.hi)//2
+        if root.left == None:
+            root.left = Node(root.low,mid,root.val)
+        if root.right == None:
+            root.right = Node(mid+1, root.hi, root.val)
+        res = float('-inf')
+        if l <= mid:
+            res = max(res,self.queryhlp(root.left,l,r))
+        if r > mid:
+            res = max(res,self.queryhlp(root.right,l,r))
+        return res
+    def updatehlp(self,root,l,r,val):
+        if l <= root.low and root.hi <= r:
+            root.val = val
+            root.left = None
+            root.right = None
+            return
+        mid = (root.low + root.hi)//2
+        if root.left == None:
+            root.left = Node(root.low,mid,root.val)
+        if root.right == None:
+            root.right = Node(mid+1, root.hi, root.val)
+        if l <= mid:
+            self.updatehlp(root.left,l,r,val)
+        if r > mid:
+            self.updatehlp(root.right,l,r,val)
+        root.val = max(root.left.val,root.right.val)
+
+class Solution(object):
+    def fallingSquares(self, positions):
+        """
+        :type positions: List[List[int]]
+        :rtype: List[int]
+        """
+        ans = []
+        maxl = 0
+        for p in positions:
+            maxl = max(maxl,sum(p))
+        tree = SegTree(maxl)
+        for pos in positions:
+            cubel = pos[0]
+            cuber = pos[0]+pos[1]-1
+            cubeh = pos[1]
+            val = tree.query(cubel,cuber)
+            tree.update(cubel,cuber,cubeh+val)
+            ans.append(tree.root.val)
+        return ans
+         
+
+```
