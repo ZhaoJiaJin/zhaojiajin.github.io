@@ -163,3 +163,116 @@ class Solution(object):
          
 
 ```
+
+## 307 range sum query
+
+```
+
+class FWTree(object):
+    def __init__(self,n):
+        self.data = [0 for _ in range(n+1)]
+    def lowbit(self,x):
+        return x & (-1*x)
+    def update(self,i,delta):
+        while i < len(self.data):
+            self.data[i] += delta
+            i += self.lowbit(i)
+    def query(self,i):
+        ans = 0
+        while i > 0:
+            ans += self.data[i]
+            i -= self.lowbit(i)
+        return ans
+
+class Node(object):
+    def __init__(self,s,e,val):
+        self.start = s
+        self.end = e
+        self.val = val
+        self.left = None
+        self.right = None
+        
+class SegTree(object):
+    def __init__(self,nums):
+        self.root = self.build(nums,0,len(nums)-1)
+    def build(self,nums,i,j):
+        if i > j:
+            return None
+        if i == j:
+            return Node(i,j,nums[i])
+        node = Node(i,j,0)
+        mid = i + (j-i)//2
+        node.left = self.build(nums,i,mid)
+        node.right = self.build(nums,mid+1,j)
+        node.val = node.left.val + node.right.val
+        return node
+    def update(self,pos,val):
+        return self.updatehlp(self.root,pos,val)
+    def updatehlp(self,root,pos,val):
+        if root.start == root.end and root.end == pos:
+            root.val = val
+            return
+        mid = root.start + (root.end-root.start)//2
+        if pos <= mid:
+            self.updatehlp(root.left,pos,val)
+        else:
+            self.updatehlp(root.right,pos,val)
+        root.val = root.left.val + root.right.val
+        return
+    def query(self,i,j):
+        return self.queryhlp(self.root,i,j)
+    def queryhlp(self,root,i,j):
+        if i <= root.start and root.end <= j:
+            return root.val
+        mid = root.start + (root.end-root.start)//2
+        ans = 0
+        if i <= mid:
+            ans += self.queryhlp(root.left,i,j)
+        if j >= mid+1:
+            ans += self.queryhlp(root.right,i,j)
+        return ans
+            
+            
+        
+    
+    
+class NumArray(object):
+
+    def __init__(self, nums):
+        """
+        :type nums: List[int]
+        """
+        #self.fwt = FWTree(len(nums))
+        #self.nums = nums
+        #for i in range(len(nums)):
+        #    self.fwt.update(i+1,nums[i])
+        self.stree = SegTree(nums)
+
+    def update(self, i, val):
+        """
+        :type i: int
+        :type val: int
+        :rtype: None
+        """
+        #self.fwt.update(i+1,val-self.nums[i])
+        #self.nums[i] = val
+        self.stree.update(i,val)
+        
+
+    def sumRange(self, i, j):
+        """
+        :type i: int
+        :type j: int
+        :rtype: int
+        """
+        #return self.fwt.query(j+1) - self.fwt.query(i)
+        return  self.stree.query(i,j)
+        
+
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# obj.update(i,val)
+# param_2 = obj.sumRange(i,j)
+
+```
