@@ -166,7 +166,7 @@ class Solution(object):
 
 ## 307 range sum query
 
-```
+```python
 
 class FWTree(object):
     def __init__(self,n):
